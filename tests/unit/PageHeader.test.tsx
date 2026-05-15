@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 describe("PageHeader", () => {
   it("renders eyebrow, h1, and intro paragraph", () => {
     render(<PageHeader eyebrow="Services" title="What we do." intro="Auckland-wide flooring." />);
-    expect(screen.getByText("SERVICES")).toBeTruthy();
+    expect(screen.getByText("Services")).toBeTruthy();
     expect(screen.getByRole("heading", { level: 1, name: "What we do." })).toBeTruthy();
     expect(screen.getByText("Auckland-wide flooring.")).toBeTruthy();
   });

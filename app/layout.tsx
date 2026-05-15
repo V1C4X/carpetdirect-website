@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
+import { Roboto_Flex } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
+
+const robotoFlex = Roboto_Flex({
+  subsets: ["latin"],
+  display: "swap",
+  axes: ["opsz", "wdth"],
+  variable: "--font-roboto-flex",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -28,8 +36,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-NZ">
-      <body className="min-h-dvh bg-bg text-fg flex flex-col">
+    <html lang="en-NZ" className={robotoFlex.variable}>
+      <body
+        className="min-h-dvh bg-bg text-fg flex flex-col"
+        style={{ fontFamily: "var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif" }}
+      >
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
