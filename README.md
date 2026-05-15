@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Carpet Direct NZ — Website
 
-## Getting Started
+Marketing site for **Carpet Direct NZ Ltd** — Auckland flooring supply and installation,
+proudly walked on since 2005.
 
-First, run the development server:
+- **Stack:** Next.js 16 (App Router, Turbopack) · React 19 · Tailwind CSS v4 · TypeScript
+- **Design direction:** Photo-first showroom · editorial restraint · Advance Flooring as the north star
+- **Brand palette:** earth-tone (charcoal, off-white, stone, taupe, direct gold, installation green)
+- **Type:** Roboto Flex (single-family rule)
+
+## Pages
+
+| Route       | What's on it                                                                |
+|-------------|-----------------------------------------------------------------------------|
+| `/`         | Editorial hero, trust strip, floor categories, story, process, reviews, CTA |
+| `/products` | Showroom (R/C toggle + swatch picker), full category cards, samples CTA    |
+| `/services` | Measure → supply → install → prep, sectors served, Auckland-wide coverage  |
+| `/gallery`  | Asymmetric project grid filtered by residential / commercial                |
+| `/about`    | Mike's story, values, by-the-numbers, warehouse visit CTA                  |
+| `/contact`  | Free measure form (server action + honeypot), phone, hours, address card   |
+
+## Run Locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
+bun run dev          # http://localhost:3000
+bun run typecheck    # strict TS
+bun run test         # vitest (unit)
+bun run build        # production build
+bun run e2e          # playwright (after `bun run e2e:install`)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project layout
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+app/                Next.js routes (one folder per page) + globals.css + layout shell
+components/
+  layout/           Header, Footer, MobileNav
+  sections/         Page-level composite sections (ProductShowroom, GalleryGrid, ContactForm)
+  ui/               Primitives (Button, Card, Chip, Eyebrow, Input, PageHeader, Select, Tag, Textarea, RCToggle)
+lib/
+  cn.ts             clsx helper
+  content/          Typed content for products + gallery (single source of truth)
+public/
+  brand/            Logos
+  photos/           Install photography
+tests/
+  unit/             Vitest component tests
+  e2e/              Playwright nav + footer smoke tests
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Contact form
 
-## Learn More
+The `/contact` form posts to a server action in `app/contact/actions.ts`. It currently
+logs submissions server-side and returns a success message. To wire up email delivery:
 
-To learn more about Next.js, take a look at the following resources:
+1. Add a Resend API key as `RESEND_API_KEY` in env.
+2. In `app/contact/actions.ts`, replace the `console.log` with a Resend send to
+   `carpetdirectsale@gmail.com`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Brand reference
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `BRAIN/brand_refs/brand_redesign_2026-05-12.png` — full lockup + alt logos
+- `BRAIN/brand_refs/brand_palette_2026-05-12.png` — locked palette
+- `BRAIN/design_system.md` — rules of engagement before any new visual asset

@@ -6,6 +6,8 @@ export default defineConfig({
     environment: "happy-dom",
     include: ["tests/unit/**/*.test.{ts,tsx}"],
     globals: true,
+    fileParallelism: false,
+    maxWorkers: 1,
     setupFiles: [],
   },
   resolve: {
