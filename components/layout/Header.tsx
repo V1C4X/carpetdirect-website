@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MobileNav } from "./MobileNav";
 
@@ -11,28 +12,34 @@ const NAV = [
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-stone bg-off-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-6 px-6 py-4">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="text-headline font-bold tracking-tight text-charcoal">
-            Carpet <span className="font-black">Direct</span> NZ
-          </span>
+    <header className="sticky top-0 z-40 border-b border-stone/70 bg-off-white/85 backdrop-blur-md">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 px-6 py-4 md:py-5">
+        <Link href="/" aria-label="Carpet Direct NZ — home" className="flex items-center">
+          <Image
+            src="/brand/logo-primary.png"
+            alt="Carpet Direct NZ"
+            width={420}
+            height={120}
+            priority
+            className="h-9 w-auto md:h-11"
+          />
         </Link>
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-8 md:flex">
           {NAV.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="text-small font-medium text-charcoal transition-colors hover:text-green"
+              className="text-small font-medium tracking-wide text-charcoal/85 transition-colors hover:text-charcoal"
             >
               {label}
             </Link>
           ))}
           <Link
             href="/contact"
-            className="rounded-sm bg-gold px-4 py-2 text-eyebrow font-bold uppercase tracking-[0.15em] text-charcoal transition-transform hover:scale-[1.02]"
+            className="group inline-flex items-center gap-2 rounded-pill bg-charcoal px-5 py-2.5 text-eyebrow font-bold uppercase tracking-[0.18em] text-off-white transition-all hover:bg-gold hover:text-charcoal"
           >
-            Free Quote
+            <span>Free Quote</span>
+            <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
           </Link>
         </nav>
         <MobileNav items={NAV} />
