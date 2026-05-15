@@ -2,10 +2,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 import { RCToggle, type Segment } from "@/components/ui/RCToggle";
 import { Chip } from "@/components/ui/Chip";
-import { ROOMS, SWATCHES, type Swatch } from "@/lib/content/products";
+import { Reveal } from "@/components/ui/Reveal";
+import { SWATCHES, type Swatch } from "@/lib/content/products";
 
 const CATS = [
   { id: "all" as const, label: "All" },
@@ -16,6 +16,25 @@ const CATS = [
 ];
 
 type CatFilter = (typeof CATS)[number]["id"];
+
+/**
+ * Give a swatch chip a sense of material — fine grain via stacked radial
+ * gradients on top of the base colour. CSS-only, no image required.
+ */
+function swatchTexture(baseColor: string): React.CSSProperties {
+  return {
+    backgroundColor: baseColor,
+    backgroundImage: [
+      // micro-fibre noise — tight radial dots, low contrast
+      "radial-gradient(rgba(255,255,255,0.10) 0.5px, transparent 0.6px)",
+      "radial-gradient(rgba(0,0,0,0.18) 0.5px, transparent 0.6px)",
+      // soft directional sheen
+      "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.08) 100%)",
+    ].join(","),
+    backgroundSize: "3px 3px, 5px 5px, 100% 100%",
+    backgroundPosition: "0 0, 1.5px 1.5px, 0 0",
+  };
+}
 
 export function ProductShowroom() {
   const [segment, setSegment] = useState<Segment>("residential");
@@ -30,134 +49,207 @@ export function ProductShowroom() {
     [segment, cat],
   );
 
-  // keep selection valid when filters change
   const active: Swatch =
     visible.find((s) => s.id === activeId) ?? visible[0] ?? SWATCHES[0];
 
-  const room = ROOMS[segment];
-
   return (
-    <section className="bg-off-white py-section-mobile md:py-section">
+    <section className="bg-off-white pb-section-mobile md:pb-section">
       <div className="mx-auto max-w-[1280px] px-6">
-        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div className="max-w-[640px]">
-            <Eyebrow>Showroom</Eyebrow>
-            <h2 className="mt-3 text-display-l font-black tracking-tight text-charcoal md:text-[3.25rem] md:leading-[1.05]">
-              See it in the room.
-            </h2>
-            <p className="mt-4 max-w-[58ch] text-body-l text-taupe">
-              Switch between residential and commercial rooms, filter by floor type, and tap a
-              swatch to preview the tone in context. For real samples, order free or pop into
-              the Otara warehouse.
+        {/* ─── Intro row ───────────────────────────────────────── */}
+        <Reveal>
+          <div className="grid items-end gap-10 md:grid-cols-12">
+            <div className="md:col-span-7">
+              <p className="text-caption uppercase tracking-[0.22em] text-taupe">
+                The sample wall
+              </p>
+              <h2 className="mt-5 text-display-xl font-medium tracking-tight text-charcoal">
+                Every floor we keep, in a single browse.
+              </h2>
+            </div>
+            <p className="text-body-l text-taupe md:col-span-5">
+              Filter by residential or commercial, narrow by floor type, and
+              pick a tone. Order free samples to your door — the colour you
+              choose at midnight on the laptop is rarely the colour you choose
+              with the morning light in your room.
             </p>
+          </div>
+        </Reveal>
+
+        {/* ─── Filters ─────────────────────────────────────────── */}
+        <Reveal className="mt-14 flex flex-wrap items-center justify-between gap-6 border-b border-charcoal/15 pb-6">
+          <div className="flex flex-wrap items-center gap-2">
+            {CATS.map((c) => (
+              <Chip
+                key={c.id}
+                active={cat === c.id}
+                onClick={() => setCat(c.id)}
+              >
+                {c.label}
+              </Chip>
+            ))}
           </div>
           <RCToggle value={segment} onChange={setSegment} />
-        </div>
+        </Reveal>
 
-        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12">
-          {/* ─── Room preview ────────────────────────────── */}
+        {/* ─── Swatch grid + active detail ─────────────────────── */}
+        <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Swatch grid */}
           <div className="lg:col-span-7">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-stone shadow-soft">
-              <Image
-                key={room.src}
-                src={room.src}
-                alt={room.alt}
-                fill
-                priority
-                sizes="(min-width: 1024px) 60vw, 100vw"
-                className="object-cover"
-              />
-              {/* floor overlay — lower half tinted by selected swatch */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] mix-blend-multiply transition-colors duration-500 ease-out"
-                style={{ backgroundColor: active.color, opacity: 0.55 }}
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-transparent to-off-white/10 mix-blend-overlay"
-              />
-              <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-pill bg-charcoal/85 px-4 py-2 text-eyebrow font-bold uppercase tracking-[0.18em] text-off-white backdrop-blur">
-                <span
-                  aria-hidden
-                  className="h-3 w-3 rounded-full border border-off-white/40"
-                  style={{ backgroundColor: active.color }}
-                />
-                Previewing · {active.name}
-              </div>
-            </div>
-            <p className="mt-3 text-small text-taupe">
-              Preview is illustrative only — tone varies in person and with daylight. Order
-              free samples for the real read.
-            </p>
-          </div>
-
-          {/* ─── Swatch picker ───────────────────────────── */}
-          <div className="lg:col-span-5">
-            <div className="flex flex-wrap gap-2">
-              {CATS.map((c) => (
-                <Chip key={c.id} active={cat === c.id} onClick={() => setCat(c.id)}>
-                  {c.label}
-                </Chip>
-              ))}
-            </div>
-
-            <div className="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-3">
-              {visible.map((s) => {
-                const selected = s.id === active.id;
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    aria-pressed={selected}
-                    onClick={() => setActiveId(s.id)}
-                    className={`group relative flex aspect-square flex-col justify-end overflow-hidden rounded-md border-2 p-3 text-left transition-all ${
-                      selected
-                        ? "border-gold shadow-soft"
-                        : "border-stone/70 hover:border-charcoal/70"
-                    }`}
-                    style={{ backgroundColor: s.color }}
-                  >
-                    <span
-                      aria-hidden
-                      className="absolute inset-0 bg-gradient-to-t from-charcoal/45 to-transparent"
-                    />
-                    <span className="relative text-eyebrow font-bold uppercase tracking-[0.15em] text-off-white">
-                      {s.name}
-                    </span>
-                  </button>
-                );
-              })}
+            <Reveal>
+              <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                {visible.map((s) => {
+                  const selected = s.id === active.id;
+                  return (
+                    <li key={s.id}>
+                      <button
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => setActiveId(s.id)}
+                        className={`group relative block aspect-[4/5] w-full overflow-hidden rounded-md text-left transition-all duration-300 ease-out ${
+                          selected
+                            ? "ring-2 ring-charcoal ring-offset-4 ring-offset-off-white"
+                            : "hover:-translate-y-1"
+                        }`}
+                      >
+                        {/* Material texture */}
+                        <span
+                          aria-hidden
+                          className="absolute inset-0"
+                          style={swatchTexture(s.color)}
+                        />
+                        {/* Top edge highlight + bottom shadow for tactile depth */}
+                        <span
+                          aria-hidden
+                          className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/12 to-transparent"
+                        />
+                        <span
+                          aria-hidden
+                          className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-charcoal/35 to-transparent"
+                        />
+                        {/* Name plate */}
+                        <span className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4">
+                          <span className="text-caption uppercase tracking-[0.2em] text-off-white/75">
+                            {s.category}
+                          </span>
+                          <span className="text-headline font-medium leading-tight text-off-white">
+                            {s.name}
+                          </span>
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
               {visible.length === 0 && (
-                <p className="col-span-full rounded-md border border-dashed border-stone p-6 text-center text-small text-taupe">
-                  No swatches in this combination — try another filter.
+                <p className="rounded-md border border-dashed border-stone p-8 text-center text-body text-taupe">
+                  No swatches in this combination — try a different filter.
                 </p>
               )}
-            </div>
-
-            <div className="mt-8 rounded-md border border-stone bg-off-white p-6">
-              <Eyebrow>{active.category}</Eyebrow>
-              <p className="mt-2 text-display-m font-black tracking-tight text-charcoal">
-                {active.name}
-              </p>
-              <p className="mt-2 text-body text-taupe">{active.note}</p>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link
-                  href="/contact?topic=samples"
-                  className="inline-flex items-center gap-2 rounded-pill bg-charcoal px-5 py-2.5 text-eyebrow font-bold uppercase tracking-[0.18em] text-off-white transition-colors hover:bg-gold hover:text-charcoal"
-                >
-                  Order free sample
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 rounded-pill border border-charcoal/80 px-5 py-2.5 text-eyebrow font-bold uppercase tracking-[0.18em] text-charcoal hover:bg-charcoal hover:text-off-white"
-                >
-                  Get a quote
-                </Link>
-              </div>
-            </div>
+            </Reveal>
           </div>
+
+          {/* Active detail panel */}
+          <aside className="lg:col-span-5 lg:sticky lg:top-28 lg:self-start">
+            <Reveal>
+              {/* Big material zoom */}
+              <div
+                key={active.id}
+                className="relative aspect-[4/3] w-full overflow-hidden rounded-lg shadow-soft"
+                style={swatchTexture(active.color)}
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/15 to-transparent"
+                />
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-charcoal/30 to-transparent"
+                />
+                <span className="absolute left-5 top-5 inline-flex items-center gap-2 text-caption uppercase tracking-[0.2em] text-off-white/85">
+                  <span
+                    aria-hidden
+                    className="h-px w-6 bg-gold"
+                  />
+                  Detail · {active.category}
+                </span>
+              </div>
+
+              <div className="mt-8">
+                <p className="text-caption uppercase tracking-[0.22em] text-taupe">
+                  Now showing
+                </p>
+                <h3 className="mt-3 text-display-l font-medium tracking-tight text-charcoal">
+                  {active.name}
+                </h3>
+                <p className="mt-3 text-body-l text-charcoal/80">{active.note}</p>
+                <p className="mt-2 text-small italic text-taupe">
+                  Tone shown is illustrative — real samples land within the week.
+                </p>
+
+                <div className="mt-8 flex flex-col gap-4">
+                  <Link
+                    href={`/contact?topic=samples&swatch=${active.id}`}
+                    className="group inline-flex items-center justify-between gap-3 rounded-md bg-charcoal px-5 py-3.5 text-body font-medium text-off-white transition-colors hover:bg-gold hover:text-charcoal"
+                  >
+                    Order this swatch
+                    <span
+                      aria-hidden
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-off-white/15 transition-all group-hover:bg-charcoal group-hover:text-off-white"
+                    >
+                      →
+                    </span>
+                  </Link>
+                  <Link
+                    href={`/contact?cat=${active.category}`}
+                    className="inline-flex items-center gap-3 text-small font-medium text-charcoal hover:text-gold"
+                  >
+                    <span className="border-b border-charcoal pb-1">
+                      Get a quote on {active.category}
+                    </span>
+                    <span aria-hidden>→</span>
+                  </Link>
+                </div>
+              </div>
+            </Reveal>
+          </aside>
         </div>
+
+        {/* ─── Real wall photo as honest counterweight ────────── */}
+        <Reveal className="mt-24 grid items-end gap-10 md:mt-32 md:grid-cols-12 md:gap-16">
+          <div className="md:col-span-5">
+            <p className="text-caption uppercase tracking-[0.22em] text-taupe">
+              At the warehouse
+            </p>
+            <h3 className="mt-4 text-display-l font-medium tracking-tight text-charcoal">
+              Or skip the screen — drive to Otara.
+            </h3>
+            <p className="mt-5 max-w-[44ch] text-body-l text-charcoal/80">
+              The sample wall lives at 28 Lovegrove Crescent. Walk it, feel
+              it, take what you like home.
+            </p>
+            <Link
+              href="/contact"
+              className="mt-8 inline-flex items-center gap-3 text-small font-medium text-charcoal hover:text-gold"
+            >
+              <span className="border-b border-gold pb-1">Plan a visit</span>
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
+          <div className="md:col-span-7">
+            <div className="relative aspect-[5/4] w-full overflow-hidden rounded-md bg-stone">
+              <Image
+                src="/photos/real-install-1.webp"
+                alt="Numbered carpet swatches arranged on the warehouse sample wall"
+                fill
+                sizes="(min-width: 768px) 55vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <p className="mt-3 max-w-[60ch] text-caption italic leading-[1.5] text-taupe">
+              The actual sample wall · Carpet Direct warehouse, Otara
+            </p>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
