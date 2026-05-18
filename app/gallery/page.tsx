@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { Eyebrow } from "@/components/ui/Eyebrow";
+import { Reveal } from "@/components/ui/Reveal";
 import { GalleryGrid } from "@/components/sections/GalleryGrid";
 
 export const metadata = {
@@ -20,27 +20,38 @@ export default function GalleryPage() {
 
       <GalleryGrid />
 
-      {/* ── CTA strip ─────────────────────────────────────── */}
-      <section className="bg-stone/40 py-section-mobile md:py-section">
-        <div className="mx-auto grid max-w-[1280px] gap-10 px-6 md:grid-cols-12 md:items-center">
-          <div className="md:col-span-8">
-            <Eyebrow>Want yours in here?</Eyebrow>
-            <h2 className="mt-3 text-display-l font-black tracking-tight text-charcoal md:text-[2.75rem] md:leading-[1.05]">
-              Start with a free in-home measure.
-            </h2>
-            <p className="mt-4 max-w-[58ch] text-body-l text-taupe">
-              We&apos;ll walk your space, talk through floors that suit it, and quote
-              directly — no showroom mark-up, no pressure.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-3 md:col-span-4 md:justify-end">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-pill bg-charcoal px-7 py-3.5 text-eyebrow font-bold uppercase tracking-[0.18em] text-off-white shadow-soft transition-colors hover:bg-gold hover:text-charcoal"
-            >
-              Book measure <span aria-hidden>→</span>
-            </Link>
-          </div>
+      {/* ── Final CTA, editorial ──────────────────────── */}
+      <section className="bg-off-white">
+        <div className="mx-auto max-w-[1280px] border-t border-stone/70 px-6 py-24 md:py-40">
+          <Reveal className="grid items-end gap-10 md:grid-cols-12">
+            <div className="md:col-span-7">
+              <p className="text-caption uppercase tracking-[0.22em] text-taupe">
+                Want yours in here?
+              </p>
+              <h2 className="mt-5 text-display-xl font-medium tracking-tight text-charcoal">
+                Start with a free in-home measure.
+                <br />
+                <span className="text-taupe">
+                  We&apos;ll walk your space and quote it directly.
+                </span>
+              </h2>
+            </div>
+            <div className="flex flex-col items-start gap-4 md:col-span-5 md:items-end">
+              <Link
+                href="/contact"
+                className="group inline-flex items-center gap-3 text-body-l font-medium text-charcoal"
+              >
+                <span className="border-b border-gold pb-1.5">Book a measure</span>
+                <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
+              </Link>
+              <a
+                href="tel:+64214864476"
+                className="text-small text-taupe hover:text-charcoal"
+              >
+                or call 021 486 476
+              </a>
+            </div>
+          </Reveal>
         </div>
       </section>
     </>

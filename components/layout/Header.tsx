@@ -24,21 +24,21 @@ export function Header() {
             className="h-9 w-auto md:h-11"
           />
         </Link>
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-10 md:flex">
           {NAV.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="text-small font-medium tracking-wide text-charcoal/85 transition-colors hover:text-charcoal"
+              className="text-small text-charcoal/75 transition-colors hover:text-charcoal"
             >
               {label}
             </Link>
           ))}
           <Link
             href="/contact"
-            className="group inline-flex items-center gap-2 rounded-pill bg-charcoal px-5 py-2.5 text-eyebrow font-bold uppercase tracking-[0.18em] text-off-white transition-all hover:bg-gold hover:text-charcoal"
+            className="group inline-flex items-center gap-2 text-small font-medium text-charcoal"
           >
-            <span>Free Quote</span>
+            <span className="border-b border-gold pb-1">Free measure</span>
             <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
           </Link>
         </nav>

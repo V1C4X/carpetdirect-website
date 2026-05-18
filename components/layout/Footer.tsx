@@ -37,17 +37,18 @@ export function Footer() {
           </p>
           <Link
             href="/contact"
-            className="mt-8 inline-flex items-center gap-2 rounded-pill bg-gold px-5 py-2.5 text-eyebrow font-bold uppercase tracking-[0.18em] text-charcoal transition-transform hover:scale-[1.02]"
+            className="group mt-8 inline-flex items-center gap-3 text-body-l font-medium text-off-white"
           >
-            Book Free Measure <span aria-hidden>→</span>
+            <span className="border-b border-gold pb-1.5">Book a free measure</span>
+            <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
           </Link>
         </div>
 
         <div className="md:col-span-3">
-          <p className="text-eyebrow font-bold uppercase tracking-[0.2em] text-gold">
+          <p className="text-caption uppercase tracking-[0.22em] text-off-white/55">
             Floors
           </p>
-          <ul className="mt-4 space-y-2.5 text-body text-off-white/85">
+          <ul className="mt-5 space-y-2.5 text-body text-off-white/85">
             {SERVICES.map((s) => (
               <li key={s.href}>
                 <Link href={s.href} className="transition-colors hover:text-gold">
@@ -59,10 +60,10 @@ export function Footer() {
         </div>
 
         <div className="md:col-span-2">
-          <p className="text-eyebrow font-bold uppercase tracking-[0.2em] text-gold">
+          <p className="text-caption uppercase tracking-[0.22em] text-off-white/55">
             Visit
           </p>
-          <ul className="mt-4 space-y-2.5 text-body text-off-white/85">
+          <ul className="mt-5 space-y-2.5 text-body text-off-white/85">
             {SITE.map((s) => (
               <li key={s.href}>
                 <Link href={s.href} className="transition-colors hover:text-gold">
@@ -74,10 +75,10 @@ export function Footer() {
         </div>
 
         <div className="md:col-span-2">
-          <p className="text-eyebrow font-bold uppercase tracking-[0.2em] text-gold">
+          <p className="text-caption uppercase tracking-[0.22em] text-off-white/55">
             Contact
           </p>
-          <ul className="mt-4 space-y-2.5 text-body text-off-white/85">
+          <ul className="mt-5 space-y-2.5 text-body text-off-white/85">
             <li>
               <a href="tel:+64214864476" className="hover:text-gold">
                 021 486 476
@@ -88,12 +89,12 @@ export function Footer() {
                 carpetdirectsale@gmail.com
               </a>
             </li>
-            <li className="text-off-white/70">
+            <li className="text-off-white/65">
               28 Lovegrove Cres
               <br />
               Otara, Auckland
             </li>
-            <li className="text-off-white/70">
+            <li className="text-off-white/65">
               Mon–Fri 8–3
               <br />
               Sat 11–3
@@ -103,7 +104,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-off-white/10">
-        <div className="mx-auto flex max-w-[1280px] flex-col items-start gap-3 px-6 py-6 text-eyebrow uppercase tracking-[0.2em] text-off-white/55 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex max-w-[1280px] flex-col items-start gap-3 px-6 py-6 text-caption uppercase tracking-[0.22em] text-off-white/50 md:flex-row md:items-center md:justify-between">
           <span>© {new Date().getFullYear()} Carpet Direct NZ Ltd</span>
           <span>Proudly walked on since 2005</span>
         </div>

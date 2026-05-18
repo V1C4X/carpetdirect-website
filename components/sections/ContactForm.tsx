@@ -29,16 +29,16 @@ export function ContactForm() {
 
   if (state.status === "ok") {
     return (
-      <div className="rounded-lg border border-green/40 bg-green/10 p-8">
-        <p className="text-eyebrow font-bold uppercase tracking-[0.2em] text-green">
+      <div className="border-t border-charcoal/15 pt-10">
+        <p className="text-caption uppercase tracking-[0.22em] text-taupe">
           Got it
         </p>
-        <p className="mt-3 text-display-m font-black tracking-tight text-charcoal">
+        <p className="mt-5 text-display-l font-medium tracking-tight text-charcoal">
           {state.message}
         </p>
-        <p className="mt-4 text-body text-taupe">
+        <p className="mt-6 max-w-[44ch] text-body-l text-charcoal/80">
           In the meantime, you&apos;re welcome to phone Mike directly on{" "}
-          <a className="font-bold text-charcoal underline-offset-4 hover:underline" href="tel:+64214864476">
+          <a className="border-b border-gold pb-0.5 text-charcoal hover:text-gold" href="tel:+64214864476">
             021 486 476
           </a>
           .
@@ -104,16 +104,23 @@ export function ContactForm() {
         </p>
       )}
 
-      <div className="flex flex-wrap items-center gap-4 pt-2">
+      <div className="flex flex-wrap items-center gap-6 pt-4">
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex items-center gap-2 rounded-pill bg-charcoal px-7 py-3.5 text-eyebrow font-bold uppercase tracking-[0.18em] text-off-white shadow-soft transition-colors hover:bg-gold hover:text-charcoal disabled:opacity-60"
+          className="group inline-flex items-center gap-3 text-body-l font-medium text-charcoal disabled:opacity-60"
         >
-          {pending ? "Sending…" : "Send to Mike"}
-          {!pending && <span aria-hidden>→</span>}
+          <span className="border-b border-gold pb-1.5">
+            {pending ? "Sending…" : "Send to Mike"}
+          </span>
+          <span
+            aria-hidden
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-charcoal text-off-white transition-all group-hover:bg-gold group-hover:text-charcoal"
+          >
+            →
+          </span>
         </button>
-        <p className="text-small text-taupe">
+        <p className="max-w-[36ch] text-small text-taupe">
           We&apos;ll only use your details to get back to you about flooring.
         </p>
       </div>
