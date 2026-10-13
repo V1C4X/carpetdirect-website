@@ -131,7 +131,7 @@ export default function HomePage() {
          FLOORS — four editorial pairs, image-text alternating.
          No overlay-card grid. Each gets its own page space.
       ────────────────────────────────────────────────────────── */}
-      <section className="bg-off-white pb-section-mobile md:pb-section">
+      <section id="solutions" className="bg-off-white pb-section-mobile md:pb-section">
         <div className="mx-auto max-w-[1280px] px-6">
           <div className="flex flex-col gap-24 md:gap-40">
             {FLOORS.map((f, i) => {
